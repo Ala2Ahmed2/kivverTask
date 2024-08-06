@@ -32,7 +32,6 @@ class CityRepository @Inject constructor(@ApplicationContext private val context
         return context.assets.open("cities.json").bufferedReader().use { it.readText() }
     }
 
-    fun getCities(): List<City> = cities
 
     fun filterCities(prefix: String): List<City> {
         return cities.filter { it.name.startsWith(prefix, ignoreCase = true) }

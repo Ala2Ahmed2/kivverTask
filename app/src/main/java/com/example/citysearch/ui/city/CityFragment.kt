@@ -1,7 +1,6 @@
 package com.example.citysearch.ui.city
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.citysearch.databinding.FragmentCityBinding
+import com.example.citysearch.ui.MapsActivity
 import com.example.citysearch.ui.city.adapter.CityAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +20,11 @@ class CityFragment : Fragment() {
     private val cityViewModel: CityViewModel by viewModels()
     private lateinit var binding: FragmentCityBinding
     private val cityAdapter = CityAdapter(emptyList()) { city ->
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${city.coord.lat},${city.coord.lon}"))
+
+        val intent = Intent(requireContext(), MapsActivity::class.java).apply {
+            putExtra("LATITUDE", city.coord.lat)
+            putExtra("LONGITUDE", city.coord.lon)
+        }
         startActivity(intent)
     }
 
