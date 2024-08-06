@@ -29,12 +29,16 @@ class CityViewModel @Inject constructor(private val repository: CityRepository) 
         _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateCities(json)
-            _cities.postValue(repository.filterCities("").sortedBy { it.name })
+            val filteredCities = repository.filterCities("").sortedBy { it.name }
+            _cities.postValue(filteredCities)
             _isLoading.postValue(false)
         }
     }
 
     fun filterCities(prefix: String) {
-        _cities.value = repository.filterCities(prefix).sortedBy { it.name }
+        viewModelScope.launch(Dispatchers.IO) {
+            val filteredCities = repository.filterCities(prefix).sortedBy { it.name }
+            _cities.postValue(filteredCities)
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.example.citysearch.ui.city
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,8 @@ class CityFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCityBinding.inflate(inflater, container, false)
+        binding.cityViewModel = cityViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -39,13 +40,11 @@ class CityFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = cityAdapter
 
-
         cityViewModel.cities.observe(viewLifecycleOwner) { cities ->
             cityAdapter.updateCities(cities)
         }
 
         cityViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            Log.d("CityFragment", "Loading state: $isLoading")
             binding.loadingView.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
